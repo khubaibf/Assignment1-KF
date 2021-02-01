@@ -7,9 +7,9 @@ namespace Assignment1_KF
 {
     class Program
     {
-            // Function for Question 1
-            private static void printTriangle(int n)
-            {
+        // Function for Question 1
+        private static void printTriangle(int n)
+        {
             try
             {
                 int i, j, k, l;
@@ -31,14 +31,14 @@ namespace Assignment1_KF
                     Console.Write("\n");
                 }
 
-            }    
+            }
             catch (Exception)
             {
                 throw;
             }
-           
 
-            }
+
+        }
 
         // Function for Question 2
         private static void printPellSeries(int n2)
@@ -49,7 +49,7 @@ namespace Assignment1_KF
                 int prior, last, temp;
                 prior = 0;
                 last = 1;
-                Console.Write(prior+", "+ last);
+                Console.Write(prior + ", " + last);
                 int i;
                 for (i = 3; i <= n2; i++)
                 {
@@ -77,14 +77,14 @@ namespace Assignment1_KF
         {
             try
             {
-                int  i, j;
+                int i, j;
                 for (i = 0; i < n3; i++)
                 {
                     for (j = 0; j < n3; j++)
                     {
                         if (i * i + j * j == n3)
                             return true;
-                        
+
                     }
                 }
                 return false;
@@ -148,8 +148,8 @@ namespace Assignment1_KF
                 }
 
                 return 0;
-       
-                
+
+
             }
             catch (Exception e)
             {
@@ -161,12 +161,43 @@ namespace Assignment1_KF
         }
 
         // Function for Question 5
-        private static int UniqueEmails(string[] emails)
+        private static int UniqueEmails(List<string> emails)
 
         {
             try
             {
+                string domain = "";
+                string local = "";
+                Dictionary<string, HashSet<string>> domains = new Dictionary<string, HashSet<string>>();
 
+                foreach (var email in emails)
+                {
+                    local = email.Split('@')[0];
+                    domain = email.Split('@')[1];
+
+                    local = local.Replace(".", "");
+
+                    local = local.Remove(local.IndexOf('+'));
+
+                    if (domains.ContainsKey(domain))
+                    {
+                        domains[domain].Add(local);
+                    }
+                    else
+                    {
+                        domains.Add(domain, new HashSet<string>());
+                        domains[domain].Add(local);
+                    }
+                }
+
+                int count = 0;
+
+                foreach (var k in domains.Keys)
+                {
+                    count += domains[k].Count;
+                }
+
+                return count;
 
             }
             catch (Exception e)
@@ -178,27 +209,60 @@ namespace Assignment1_KF
 
         }
 
+        // Function for Question 6
+        private static string DestCity(string[,] paths)
+
+        {
+            try
+            {
+                HashSet<string> All = new HashSet<string>();
+                HashSet<string> Outgoing = new HashSet<string>();
+
+                for (int i=0; i<paths.GetLength(0); i++)
+                {
+                    All.Add(paths[i,0]);
+                    All.Add(paths[i, 1]);
+
+                    Outgoing.Add(paths[i, 0]);
+                }
+
+                if (All.ToArray().Except(Outgoing.ToArray()).ToArray().Length != 0 )
+                {
+                    return All.ToArray().Except(Outgoing.ToArray()).ToArray()[0];
+                }
+                
+                return "";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+
+        }
+
 
         static void Main(string[] args)
-            {
+        {
 
-            
+
             //Question 1
             while (true)
-                { 
-                    try
-                    {
-                        Console.Write("Q1 : Enter the number of rows for the traingle:");
-                        int n = Convert.ToInt32(Console.ReadLine());
-                        printTriangle(n);
-                        Console.WriteLine();
-                        break;
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine("The input is out of range, please enter an integer.");
-                    }
+            {
+                try
+                {
+                    Console.Write("Q1 : Enter the number of rows for the traingle:");
+                    int n = Convert.ToInt32(Console.ReadLine());
+                    printTriangle(n);
+                    Console.WriteLine();
+                    break;
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw;
+                }
+            }
 
             //Question 2
             while (true)
@@ -211,9 +275,10 @@ namespace Assignment1_KF
                     Console.WriteLine();
                     break;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    Console.WriteLine("The input is out of range, please enter an integer.");
+                    Console.WriteLine(e.Message);
+                    throw;
                 }
             }
 
@@ -236,9 +301,10 @@ namespace Assignment1_KF
 
                     break;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    Console.WriteLine("The input is out of range, please enter an integer.");
+                    Console.WriteLine(e.Message);
+                    throw;
                 }
             }
 
@@ -254,22 +320,67 @@ namespace Assignment1_KF
                     Console.WriteLine("There exists {0} pairs with the given difference", n4);
                     break;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    Console.WriteLine("The input is out of range, please enter an integer.");
+                    Console.WriteLine("An error occured: " + e.Message);
+                    throw;
+                }
+
+            }
+
+            //Question 5
+            while (true)
+            {
+                try
+                {
+                    List<string> emails = new List<string>();
+                    emails.Add("dis.email+bull@usf.com");
+                    emails.Add("dis.e.mail+bob.cathy@usf.com");
+                    emails.Add("disemail+david@us.f.com");
+                    int ans5 = UniqueEmails(emails);
+                    Console.WriteLine("Q5");
+                    Console.WriteLine("The number of unique emails is " + ans5);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw;
+                }
+
+
+            }
+
+            //Question 6
+            while (true)
+            {
+                try
+                {
+                    string[,] paths = new string[,] { { "London", "New York" }, { "New York", "Tampa" }, { "Delhi", "London" } };
+                    string destination = DestCity(paths);
+                    Console.WriteLine("Q6");
+                    Console.WriteLine("Destination city is " + destination);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw;
+                    Console.ReadLine();
                 }
             }
+
+
+
+
+
+
+
+
+
+
+
         }
-
-
-
-
-
-
-
-
-
-
     }
-    }
+}
 
