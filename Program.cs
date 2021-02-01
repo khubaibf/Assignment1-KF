@@ -49,12 +49,17 @@ namespace Assignment1_KF
                 int prior, last, temp;
                 prior = 0;
                 last = 1;
+                // print first two terms
                 Console.Write(prior + ", " + last);
                 int i;
+
+                // print remaining terms
                 for (i = 3; i <= n2; i++)
                 {
                     Console.Write(", ");
+                    // print next term
                     Console.Write(2 * last + prior);
+                    // update terms as sequesnce progresses
                     temp = prior;
                     prior = last;
                     last = 2 * prior + temp;
@@ -63,6 +68,7 @@ namespace Assignment1_KF
                 }
 
             }
+            // catch and throw any exception that may occur
             catch (Exception)
             {
                 throw;
@@ -78,18 +84,22 @@ namespace Assignment1_KF
             try
             {
                 int i, j;
+                // nested for loops to consider sum of squares of all combinations of numbers less than n3
                 for (i = 0; i < n3; i++)
                 {
                     for (j = 0; j < n3; j++)
                     {
+                        // if found valid sum of squares, return true
                         if (i * i + j * j == n3)
                             return true;
 
                     }
                 }
+                // if no combination found, return false
                 return false;
 
             }
+            // catch and throw any exception that may occur
             catch (Exception)
             {
                 throw;
@@ -104,14 +114,19 @@ namespace Assignment1_KF
         {
             try
             {
+                // create array of distinct numbers in array
                 int[] dist = nums.Distinct().ToArray();
+                // set n equal to number of distinct numbers
                 int n = dist.Length;
                 int count = 0;
 
+                // base case k = 0
                 if (k == 0)
                 {
+                    // create dictionary to store how many times each number occurs in original array
                     Dictionary<int, int> counts = new Dictionary<int, int>();
 
+                    // for loop calculates no. of occurences
                     for (int i = 0; i < nums.Length; i++)
                     {
                         if (counts.ContainsKey(nums[i]))
@@ -124,6 +139,7 @@ namespace Assignment1_KF
                         }
                     }
 
+                    // return number of 0-diff pairs
                     for (int i = 0; i < n; i++)
                     {
                         if (counts[dist[i]] > 1)
@@ -134,16 +150,18 @@ namespace Assignment1_KF
 
                     return count;
                 }
-
+                // for all else k
                 else
                 {
+                    // compare all distinct pairs
                     for (int i = 0; i < n; i++)
                     {
                         for (int j = i + 1; j < n; j++)
+                            // if a pair is found, increment count
                             if (Math.Abs(dist[i] - dist[j]) == k)
                                 count++;
                     }
-
+                    // return count
                     return count;
                 }
 
@@ -151,6 +169,7 @@ namespace Assignment1_KF
 
 
             }
+            // catch and throw any exception that may occur
             catch (Exception e)
             {
                 Console.WriteLine("An error occured: " + e.Message);
@@ -168,8 +187,11 @@ namespace Assignment1_KF
             {
                 string domain = "";
                 string local = "";
+
+                // create dictionary where each key is a unique domain, and its value is HashSet of unique local addresses in it
                 Dictionary<string, HashSet<string>> domains = new Dictionary<string, HashSet<string>>();
 
+                // for each email, seplit local and domain name, and remove . and + plus following characters
                 foreach (var email in emails)
                 {
                     local = email.Split('@')[0];
@@ -179,6 +201,7 @@ namespace Assignment1_KF
 
                     local = local.Remove(local.IndexOf('+'));
 
+                    // update hashset of domain or insert in dict
                     if (domains.ContainsKey(domain))
                     {
                         domains[domain].Add(local);
@@ -192,6 +215,7 @@ namespace Assignment1_KF
 
                 int count = 0;
 
+                // count unique addresses and return
                 foreach (var k in domains.Keys)
                 {
                     count += domains[k].Count;
@@ -200,6 +224,7 @@ namespace Assignment1_KF
                 return count;
 
             }
+            // catch and throw any exception that may occur
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
@@ -215,7 +240,9 @@ namespace Assignment1_KF
         {
             try
             {
+                // insert all cities in All hashset
                 HashSet<string> All = new HashSet<string>();
+                // insert only outgoing cities in outgoing Hashset
                 HashSet<string> Outgoing = new HashSet<string>();
 
                 for (int i=0; i<paths.GetLength(0); i++)
@@ -226,13 +253,15 @@ namespace Assignment1_KF
                     Outgoing.Add(paths[i, 0]);
                 }
 
+                // use Except() function to find city which is not in the outgoing hashset and return
                 if (All.ToArray().Except(Outgoing.ToArray()).ToArray().Length != 0 )
                 {
                     return All.ToArray().Except(Outgoing.ToArray()).ToArray()[0];
                 }
-                
+                // return empty if no such city
                 return "";
             }
+            // catch and throw any exception that may occur
             catch (Exception)
             {
                 throw;
